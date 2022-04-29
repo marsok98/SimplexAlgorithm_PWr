@@ -1,42 +1,6 @@
 import numpy as np
 
-
-
-class SimplexTable:
-    def __init__(self, n, m, price, main, side, optimal_indicators, current_target_function, limitation, out_criteria, coefficients):
-        self.n = n
-        self.m = m
-        self.price = price
-        self.main = main
-        self.side = side
-        self.optimal_indicators = optimal_indicators
-        self.current_target_function = current_target_function
-        self.limitation = limitation
-        self.out_criteria = out_criteria
-        self.coefficients_current_solution = coefficients
-
-
-    def calculate_optimal_indicators(self):
-        for i in range(self.n+self.m):
-            for j in range(self.m):
-                self.side[i] = self.main[j][i]
-
-
-
-    def find_and_calculate_max(self):
-        pass
-
-    def find_out_criteria_and_replace_variable(self):
-        pass
-
-    def determine_if_solution_is_optimal(self):
-        pass
-
-    def calculate_new_table(self):
-        pass
-
-
-
+#https://www.geeksforgeeks.org/simplex-algorithm-tabular-method/
 class Simplex:
     def __init__(self, A,XB,Z):
         self.A_equations = A
@@ -83,7 +47,51 @@ class Simplex:
         pivot_element = self.A_equations[self.pivot_index_row_min][self.pivot_index_column_max]
         print(pivot_element)
 
+    def pivot_step(self):
+        # sekcja wejscia do podstawy
+        # najpierw wejscie do kolumny Cb inaczej D
+        self.CB_coefficients_basis_variable[self.pivot_index_row_min] = \
+            self.Z_target_function[self.pivot_index_column_max]  # przepisanie do tablicy Cb
 
+        # teraz najwiekszy myk trzeba bedzie zrobic
+        # z zrobieniem nowej macierzy
+        print(self.XB_limits[self.pivot_index_row_min])
+        pivot_element = self.A_equations[self.pivot_index_row_min][self.pivot_index_column_max]
+        self.XB_limits[self.pivot_index_row_min] /= pivot_element
+        #podzielono liczbe z kolumny XB, teraz trzeba pozostaly wiersz w kolumnie A
+        print(self.A_equations[self.pivot_index_row_min])
+
+        for j in range(len(self.A_equations[self.pivot_index_row_min])):
+            self.A_equations[self.pivot_index_row_min][j] /= pivot_element
+        #zostal podmieniony wiersz ktory zawieral pivot
+        print(self.A_equations[self.pivot_index_row_min])
+
+        #teraz nalezy zadbac o pozostala macierz, zerujac wspolczynniki bedace nad
+        #wierszem z pivotem
+
+        # zalatwiony jest wiersz tam gdzie byl pivot, ale
+        # teraz nalezy wszystkie pozostale wiersze ogarnac
+        # i przemienic tak, aby mozna bylo policzyc wskazniki optymalnosci
+        # trzeba by bylo wydzielic tablice cala poza tym wierszem pivota.
+        print("########################")
+        print(A)
+        for i in range(len(self.A_equations)):
+            if i != self.pivot_index_row_min:  # pod warunkiem, ze nie jestesmy w wierszu z min_index_row
+                var = A[i][self.pivot_index_column_max]  # wspolczynnik przez ktory mnozymy, zeby zerowac pozycje nad pivotem
+                for j in range(len(self.A_equations[0])):
+                    self.A_equations[i][j] = self.A_equations[i][j] - self.A_equations[self.pivot_index_row_min][j] * var
+                self.XB_limits[i] = self.XB_limits[i] - self.XB_limits[self.pivot_index_row_min] * var
+
+        print(self.A_equations)
+        print(self.XB_limits)
+        ##teraz nalezy policzyc wskazniki optymalnosci dla nowej tabeli
+
+
+        pass
+
+
+    def get_solution(self):
+        return self.XB_limits
 
 
 
@@ -109,81 +117,22 @@ if __name__ == '__main__':
     #zdefiniowane tabele do rozwiazania
     print(A[0][2])
 
+    A1 = [[1,1,1,0,0],[0,1,0,1,0],[1,2,0,0,1]]
+    B1 = [6,3,9]
+    C1 = [2,5,0,0,0]
 
     S1=Simplex(A,B,C)
+    #dziala narazie tylko dla 2 wymiarow
+    #celem jest zrobic dla 3
+    while S1.can_be_improved():
+        print("################################")
+        S1.get_pivot_position()
+        print("################################")
+        S1.pivot_step()
+        print("################################")
 
-    napis = S1.can_be_improved()
-    print(napis)
-    print("################################")
-    S1.get_pivot_position()
-    print("################################")
-
-    for i in range(len(C)):
-        for j in range(len(D)):
-            t += A[j][i]*D[j]
-        print(t)
-        E[i] = C[i] - t
-        t =0
-    print(E)
-
-    max_value = max(E)
-    max_index_column = E.index(max_value)
-    print(max_index_column)
-
-    for i in range(len(B)):
-        c.append(B[i]/A[i][max_index_column])
-
-    print(c)
-    min_value = min(c)
-    min_index_row = c.index(min_value)
-    print(min_index_row)
-    #max_index_column opisuje to co wejdzie do podstawy - ktora kolumna
-    #min_index_row opisuje to co wyjdzie z podstawy  - ktory wiersz
-
-    pivot_element = A[min_index_row][max_index_column]
-    print(pivot_element)
-
-    #sekcja wejscia do podstawy
-    #najpierw wejscie do kolumny Cb inaczej D
-    D[min_index_row]=C[max_index_column] #przepisanie do tablicy D
-    #teraz najwiekszy myk trzeba bedzie zrobic
-    #z zrobieniem nowej macierzy
-    print(B[min_index_row])
-    B[min_index_row] = B[min_index_row] / pivot_element
-
-    print(A[min_index_row])
-
-    for j in range(len(A[min_index_row])):
-        A[min_index_row][j] /=pivot_element
-
-    print(A[min_index_row])
-
-#zalatwiony jest wiersz tam gdzie byl pivot, ale
-#teraz nalezy wszystkie pozostale wiersze ogarnac
-#i przemienic tak, aby mozna bylo policzyc wskazniki optymalnosci
-#trzeba by bylo wydzielic tablice cala poza tym wierszem pivota.
-    print(A)
-    for i in range(len(A)):
-        if i != min_index_row: #pod warunkiem, ze nie jestesmy w wierszu z min_index_row
-            var = A[i][max_index_column] #wspolczynnik przez ktory mnozymy, zeby zerowac pozycje nad pivotem
-            for j in range(len(A[0])):
-                A[i][j] = A[i][j] - A[min_index_row][j]*var
-            B[i] = B[i] - B[min_index_row] * var
-
-    print(A)
-    print(B)
-    ##teraz nalezy policzyc wskazniki optymalnosci dla nowej tabeli
-
-    for i in range(len(C)):
-        for j in range(len(D)):
-            t += A[j][i]*D[j]
-        print(t)
-        E[i] = C[i] - t
-        t =0
-    print(E)
-##pierwsze przejscie przez program jest zrobione
-##teraz kolejna iteracja programu
-##nalezy pozamykac wszystko w funkcje
+    result = S1.get_solution()
+    print(result)
 
 
 
@@ -191,7 +140,3 @@ if __name__ == '__main__':
 
 
 
-
-
-
-    pass
