@@ -7,9 +7,25 @@ class Simplex:
         self.XB_limits = XB
         self.Z_target_function = Z
         self.CB_coefficients_basis_variable = [0]*len(XB)
+        self.B_basis_variable_number = [0] * len(XB)
         self.CZ_relative_profit = [0] * len(Z)
         self.pivot_index_column_max = 0
         self.pivot_index_row_min = 0
+
+        len(self.XB_limits) #2 ilosc tych zmiennych ograniczajacych
+        Z.index(0) #pierwszy indeks gdzie wystapilo 0. +1 zeby byla zmienna
+
+        for i in range(len(self.B_basis_variable_number)):
+            self.B_basis_variable_number[i] = Z.index(0) + len(self.B_basis_variable_number) - i
+
+        #numery zmiennych, np x5, x4,x3
+        #zebysmy wiedzieli potem jak interpretowac wynik
+
+
+
+
+
+
 
 
     def can_be_improved(self):
@@ -35,7 +51,10 @@ class Simplex:
         #obliczanie indeksu dla zmiennej wyjsciowej
         list_of_out_criteria = []
         for i in range(len(self.XB_limits)):
-            list_of_out_criteria.append(self.XB_limits[i] / self.A_equations[i][self.pivot_index_column_max])
+            if self.A_equations[i][self.pivot_index_column_max] != 0:
+                list_of_out_criteria.append(self.XB_limits[i] / self.A_equations[i][self.pivot_index_column_max])
+            else:
+                list_of_out_criteria.append(99999) #gdyby chcial dzielic przez 0 to wstaw tam duza liczbe zamiast dzielenia
 
         print(list_of_out_criteria)
         min_value = min(list_of_out_criteria)
@@ -52,7 +71,9 @@ class Simplex:
         # najpierw wejscie do kolumny Cb inaczej D
         self.CB_coefficients_basis_variable[self.pivot_index_row_min] = \
             self.Z_target_function[self.pivot_index_column_max]  # przepisanie do tablicy Cb
-
+        self.B_basis_variable_number[self.pivot_index_row_min] = \
+            self.pivot_index_column_max + 1 #okreslenie zmiennej ktora chcemy miec w podstawie
+        #+1 poniewaz zmienne sa liczone od 1
         # teraz najwiekszy myk trzeba bedzie zrobic
         # z zrobieniem nowej macierzy
         print(self.XB_limits[self.pivot_index_row_min])
@@ -74,10 +95,11 @@ class Simplex:
         # i przemienic tak, aby mozna bylo policzyc wskazniki optymalnosci
         # trzeba by bylo wydzielic tablice cala poza tym wierszem pivota.
         print("########################")
-        print(A)
         for i in range(len(self.A_equations)):
+            print("####")
+            print(i)
             if i != self.pivot_index_row_min:  # pod warunkiem, ze nie jestesmy w wierszu z min_index_row
-                var = A[i][self.pivot_index_column_max]  # wspolczynnik przez ktory mnozymy, zeby zerowac pozycje nad pivotem
+                var = self.A_equations[i][self.pivot_index_column_max]  # wspolczynnik przez ktory mnozymy, zeby zerowac pozycje nad pivotem
                 for j in range(len(self.A_equations[0])):
                     self.A_equations[i][j] = self.A_equations[i][j] - self.A_equations[self.pivot_index_row_min][j] * var
                 self.XB_limits[i] = self.XB_limits[i] - self.XB_limits[self.pivot_index_row_min] * var
@@ -91,18 +113,10 @@ class Simplex:
 
 
     def get_solution(self):
-        return self.XB_limits
+        return self.B_basis_variable_number, self.XB_limits
+        #zwracanie konkretnych zmiennych oraz wspolczynnikow im odpowiadajacych
 
-
-
-
-
-
-
-
-
-
-
+#powiedzmy ze dziala, ale ostatnia nie majaca znaczenia zmienna byla inna niz na geeks for geeks
 
 
 # Press the green button in the gutter to run the script.
@@ -121,9 +135,13 @@ if __name__ == '__main__':
     B1 = [6,3,9]
     C1 = [2,5,0,0,0]
 
-    S1=Simplex(A,B,C)
-    #dziala narazie tylko dla 2 wymiarow
-    #celem jest zrobic dla 3
+    A2 = [[-1,1,1,0,0],[1,0,0,1,0],[0,1,0,0,1]]
+    B2 = [4,4,2]
+    C2 = [1,1,0,0,0]
+    S1=Simplex(A2,B2,C2)
+    print("UWAGA")
+    print(S1.B_basis_variable_number)
+    #narazie wszystko dziala tylko dla przykladu A oraz A1
     while S1.can_be_improved():
         print("################################")
         S1.get_pivot_position()
@@ -131,6 +149,13 @@ if __name__ == '__main__':
         S1.pivot_step()
         print("################################")
 
+    #S1.can_be_improved()
+    #print("################################")
+    #S1.get_pivot_position()
+    #print("################################")
+    #S1.pivot_step()
+    #print("################################")
+    #print(S1.XB_limits)
     result = S1.get_solution()
     print(result)
 
