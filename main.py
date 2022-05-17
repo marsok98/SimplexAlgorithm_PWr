@@ -22,12 +22,6 @@ class Simplex:
         #zebysmy wiedzieli potem jak interpretowac wynik
 
 
-
-
-
-
-
-
     def can_be_improved(self):
         i=0
         j=0
@@ -138,26 +132,32 @@ if __name__ == '__main__':
     A2 = [[-1,1,1,0,0],[1,0,0,1,0],[0,1,0,0,1]]
     B2 = [4,4,2]
     C2 = [1,1,0,0,0]
-    S1=Simplex(A2,B2,C2)
+
+    A3 = [[-1,2,0,0,1],[-1,1,0,1,0],[4,5,1,0,0]]
+    #uwaga bo my ustawiamy zmienne w B od x5 potem x4, x3
+    #a nie rosnaco
+    B3 = [4,1,36]
+    C3 = [1,4,0,0,0]
+    S1=Simplex(A3,B3,C3)
     print("UWAGA")
     print(S1.B_basis_variable_number)
     #narazie wszystko dziala tylko dla przykladu A oraz A1
-    while S1.can_be_improved():
-        print("################################")
-        S1.get_pivot_position()
-        print("################################")
-        S1.pivot_step()
-        print("################################")
+    #while S1.can_be_improved():
+    #    print("################################")
+    #    S1.get_pivot_position()
+    #    print("################################")
+    #    S1.pivot_step()
+    #    print("################################")
 
-    #S1.can_be_improved()
-    #print("################################")
-    #S1.get_pivot_position()
-    #print("################################")
-    #S1.pivot_step()
-    #print("################################")
-    #print(S1.XB_limits)
-    result = S1.get_solution()
-    print(result)
+    S1.can_be_improved()
+    print("################################")
+    print(S1.CZ_relative_profit)
+    S1.get_pivot_position()
+    print(S1.pivot_index_row_min)
+    print(S1.pivot_index_column_max)
+
+
+
 
 
 
