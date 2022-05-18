@@ -16,6 +16,38 @@ class Simplex:
         #numery zmiennych, np x3, x4,x5
         #zebysmy wiedzieli potem jak interpretowac wynik
 
+    #sprawdzenie czy pierwsza kolumna ma wszystkie elementy dodatnie
+    def check_admissibility(self):
+        for i in range(len(self.YS)):
+            if self.YS[i][0] < 0:
+                return False
+        return True
+
+
+    def do_admissibility(self):
+
+        #znaleźć wiersz, ktory ma ujemna wartosc w ograniczeniach
+        #--done__
+        #znaleźć min w tym wierszu ale bez 0 elementu
+        #spisac index tej kolumny
+        #wyliczyc wspolczynniki, ale ominac wyrazy ujemny
+        #wziac minimum z tych wspolczynnikow a nastepnie z tego index
+        #indexy wziete to indeks naszego pivota
+
+        previous_value = 9999
+        row_min_value = 0
+        for i in range(len(self.YS)):
+            if self.YS[i][0] < 0:
+                current_value = self.YS[i][0]
+                if current_value < previous_value:
+                    row_min_value = i
+                    previous_value = current_value
+
+
+
+
+
+
 
 
     def can_be_improved(self):
@@ -72,10 +104,17 @@ if __name__ == '__main__':
 
     A3 = [[0,-2,-5],[24,1,4],[21,3,1],[9,1,1]]
     A4 = [[0,-2,-5],[6,1,1],[3,0,1],[9,1,2]]
-    S1 = Simplex(A4)
 
-    while S1.can_be_improved():
-        S1.get_pivot_position()
-        S1.pivot_step()
-    S1.show_optimal_solution()
+    B = [[0,-1,-6],[-2,-2,-1],[3,-1,1],[6,1,1]]
+
+
+    S1 = Simplex(B)
+
+    print(S1.check_admissibility())
+    S1.do_admissibility()
+
+   # while S1.can_be_improved():
+    #    S1.get_pivot_position()
+     #   S1.pivot_step()
+    #S1.show_optimal_solution()
 
