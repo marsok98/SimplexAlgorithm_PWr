@@ -35,6 +35,13 @@ class Simplex:
         #wyliczyc wspolczynniki, ale ominac wyrazy ujemny
         #wziac minimum z tych wspolczynnikow a nastepnie z tego index
         #indexy wziete to indeks naszego pivota
+        #--done--
+
+        #TODO
+        #Zmienic nazwy zmiennych
+        #zrealizowac te funkcje razem z tymi self, zeby byla spojnosc
+        #opisac calosc algorytmu tak, aby w kodzie byly zmienne
+        #zeby sie polapac w tym wszystkim
 
         previous_value = 9999
         row_min_value = 0
@@ -64,7 +71,6 @@ class Simplex:
             else:
                 list_of_out_criteria.append(99999)  # gdyby chcial dzielic przez 0 to wstaw tam duza liczbe zamiast dzielenia
 
-        # print(list_of_out_criteria)
         min_value = min(list_of_out_criteria)
         pivot_row_index = list_of_out_criteria.index(min_value)
 
@@ -75,11 +81,6 @@ class Simplex:
         self.pivot_index_column = pivot_column_index
         self.pivot_index_row = pivot_row_index
         self.pivot_element = self.YS[pivot_row_index][pivot_column_index]
-
-
-
-
-
 
 
 
