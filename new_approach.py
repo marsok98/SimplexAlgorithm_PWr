@@ -9,10 +9,22 @@ class Simplex:
         self.pivot_index_row = 0
         self.pivot_element = 0
 
-        self.B_basis_variable_number = [0] * (len(A[0]) - 1)
+        self.basic_variables = [""]  * (len(A)) #ilosc wierszy to zmienne podstawowe
+        self.leaving_variables = [""] * (len(A[0])) #ilosc kolumn to zmienne wyjsciowe
+        
 
-        for i in range (len(self.B_basis_variable_number)):
-            self.B_basis_variable_number[i] = A[0].index(A[0][-1]) + i
+        for i in range(len(self.basic_variables)):
+            if i == 0:
+                self.basic_variables[i] = "x0"
+            else:
+                self.basic_variables[i] = "x" + str(A[0].index(A[0][-1]) + i)
+
+        for i in range(len(self.leaving_variables)):
+            if i == 0:
+                self.leaving_variables[i] = "x0"
+            else:
+                self.leaving_variables[i] = "x" + str(i)
+
         #numery zmiennych, np x3, x4,x5
         #zebYmy wiedzieli potem jak interpretowac wY_newik
 
@@ -109,13 +121,21 @@ class Simplex:
 
         self.Y = deepcopy(self.Y_new)
 
+        ##    Krok - 6e)    ##
+        to_basic_variable = self.leaving_variables[self.pivot_index_column]
+        to_leaving_variable = self.basic_variables[self.pivot_index_row]
+        self.leaving_variables[self.pivot_index_column] = to_leaving_variable
+        self.basic_variables[self.pivot_index_row] = to_basic_variable
+
     ####    Krok - 8    ####
     def show_optimal_solution(self):
-        print(self.Y)
-
+        print("-----Rozwiazanie optymalne-----")
+        for i in range(len(self.basic_variables)):
+            print(str(self.basic_variables[i]) + ":" + str(round(self.Y[i][0],2)))
 
 if __name__ == '__main__':
     #TODO
+    # dodac nazwy zmiennych w bazie i sledzenie ich
     # przetestowac z odpowiedziami poszczegolne przejscia i kolejne tablice simplexowe
     # najlepiej z wykladem
     # dopuszczanie do rozwiazania, jak i potem szukanie rozwiazan
@@ -129,7 +149,7 @@ if __name__ == '__main__':
     # rysowanie wykresow dla 2 zmiennych
 
 
-    A = [[0,-2,-1],[5,1,1],[0,-1,1],[21,6,2]]
+
     A1 = [[7,0.33,-0.33],[1.5,-0.16,0.66],[3.5,0.16,1.33],[3.5,0.16,0.33]]
 
     A2 = [[0,-40,-30],[12,1,1],[16,2,1]]
@@ -143,9 +163,15 @@ if __name__ == '__main__':
     #dla C nie dziala, ale to jest min, plus same wiekszosciowe ograniczenia
     C = [[0,1,1],[-8,-1,-2],[-6,-2,-1],[-5,-1,-1]]
 
-    S1 = Simplex(B)
 
-    print(S1.check_admissibility())
+    #Testy na wiekszych przykladach
+    A = [[0, -2, -1], [5, 1, 1], [0, -1, 1], [21, 6, 2]]  # dziala
+    D1 = [[0,-16,-12],[720,8,6],[1280,8,16],[960,12,8],[900,4,8]] #dziala ok
+    D2 = [[0,-1,-3,-2],[5,1,2,1],[4,1,1,1],[1,0,1,2]] #dziala ok
+
+
+    S1 = Simplex(D2)
+    #print(S1.check_admissibility())
     #S1.do_admissibility()
     #S1.pivot_step()
     #print(S1.can_be_improved())
@@ -157,8 +183,15 @@ if __name__ == '__main__':
 
 
 
-    S1.check_admissibility()
-    print(S1.Y)
-    S1.do_admissibility()
-    print(S1.Y)
+    #S1.check_admissibility()
+    #print(S1.Y)
+    #S1.can_be_improved()
+
+
+
+    while S1.can_be_improved():
+        S1.get_pivot_position()
+        S1.pivot_step()
+        print(S1.Y)
+    S1.show_optimal_solution()
 

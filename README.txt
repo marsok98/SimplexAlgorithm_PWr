@@ -34,7 +34,7 @@ znakami za przeciwne.
 
 maxx0 = 1x1 + 6x2
 
-                   x1      x2
+          x0       x1      x2
    x0      0      -1      -6
    x3     -2      -2      -1
    x4      3      -1       1
@@ -104,7 +104,8 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
         - Warunek: else
         - Wzor: Y_new[k][l] = (Y[k][l] - (Y[k][pivot_index_column] * Y[pivot_index_row][l])/pivot_element)
 
-    e) - Dodatek - Jak latwiej zlapac regule do liczenia nowej tablicy Simplex?
+    e) Zamien oznaczenia zmiennych bazowych i wyjsciowych w pomocniczych tablicach
+    f) - Dodatek - Jak latwiej zlapac regule do liczenia nowej tablicy Simplex?
 
            |p    q|   =>   |    1/p         q/p     |
            |r    s|   =>   |    -r/p     s - rq/p   |
