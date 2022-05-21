@@ -83,6 +83,7 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
             - wyrazy z kolumny z indeksem nie moga byc  0
             - wyrazy z kolumny 0th nie moga byc 0
             - nie mozemy operowac na wierszu gdzie jest funkcja celu
+            - <NEW> wyrazy z kolumny z indeksem nie moga byc ujemne (podobno to sie nie liczy dla nas)
         - weź z tego minimum
             - wez indeks  z wiersza gdzie bylo minimum
             - Zmienna stojaca przy tym wierszu wychodzi z bazy

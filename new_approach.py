@@ -92,7 +92,7 @@ class Simplex:
         ##    Krok - 5b)    ##
         list_of_out_criteria = []
         for i in range(len(self.Y)):
-            if self.Y[i][self.pivot_index_column] != 0 and self.Y[i][0] != 0 and i != 0:
+            if self.Y[i][self.pivot_index_column] > 0 and self.Y[i][0] != 0 and i != 0:
                 list_of_out_criteria.append(self.Y[i][0] / self.Y[i][self.pivot_index_column])
             else:
                 list_of_out_criteria.append(99999)
@@ -135,8 +135,9 @@ class Simplex:
 
 if __name__ == '__main__':
     #TODO
-    # dodac nazwy zmiennych w bazie i sledzenie ich
-    # przetestowac z odpowiedziami poszczegolne przejscia i kolejne tablice simplexowe
+    #  - dodac nazwy zmiennych w bazie i sledzenie ich
+    #  x obsluzyc minimalizacje funkcji celu
+    #  - przetestowac z odpowiedziami poszczegolne przejscia i kolejne tablice simplexowe
     # najlepiej z wykladem
     # dopuszczanie do rozwiazania, jak i potem szukanie rozwiazan
     # sprawdzic dla wiekszych instancji jak sie zachowuje algorytm
@@ -164,34 +165,49 @@ if __name__ == '__main__':
     C = [[0,1,1],[-8,-1,-2],[-6,-2,-1],[-5,-1,-1]]
 
 
-    #Testy na wiekszych przykladach
+    #Testy
+    #Ograniczenia mniejszosciowe, max funckji celu
     A = [[0, -2, -1], [5, 1, 1], [0, -1, 1], [21, 6, 2]]  # dziala
-    D1 = [[0,-16,-12],[720,8,6],[1280,8,16],[960,12,8],[900,4,8]] #dziala ok
-    D2 = [[0,-1,-3,-2],[5,1,2,1],[4,1,1,1],[1,0,1,2]] #dziala ok
+    A1 = [[0,-16,-12],[720,8,6],[1280,8,16],[960,12,8],[900,4,8]] #dziala ok
+    A2 = [[0,-1,-3,-2],[5,1,2,1],[4,1,1,1],[1,0,1,2]] #dziala ok
+    A3 = [[0,-1,-4],[4,-1,2],[1,-1,1],[36,4,5]] # dziala
 
 
-    S1 = Simplex(D2)
-    #print(S1.check_admissibility())
-    #S1.do_admissibility()
-    #S1.pivot_step()
-    #print(S1.can_be_improved())
+    # Z pliku
+    E1 = [[0,-1,1],[3,-2,1],[6,1,1],[20,5,2]]
+    E3 = [[0,-1,-2],[3,-2,1],[6,1,1],[20,5,2]]
+    E9 = [[0,-1,-2],[100,1,1],[720,6,9],[60,0,1]]
+    E8 = [[0,-2100,-1200],[-2,2,-1],[-2,-1,2]]
+    #Ograniczenia mniejszosciowe, min funkcji celu
+    #test oblany, bo tego nie trzeba
+    B = [[0,1,1],[4,1,1],[2,-1,1]]
+
+
+    S1 = Simplex(E8)
+
+    print(S1.check_admissibility())
+    S1.do_admissibility()
+    print(S1.pivot_index_row,S1.pivot_index_column,S1.pivot_element)
+    print(S1.Y)
+
+
     #S1.get_pivot_position()
+    #print(S1.pivot_index_row,S1.pivot_index_column,S1.pivot_element)
     #S1.pivot_step()
-    #print(S1.can_be_improved())
     #print(S1.Y)
-
-
-
-
-    #S1.check_admissibility()
+    #S1.show_optimal_solution()
+    #print("########################")
+    #S1.get_pivot_position()
+    #print(S1.pivot_index_row, S1.pivot_index_column, S1.pivot_element)
+    #S1.pivot_index_row = 1
+    #S1.pivot_element = 1
+    #S1.pivot_step()
     #print(S1.Y)
-    #S1.can_be_improved()
+    #S1.show_optimal_solution()
 
-
-
-    while S1.can_be_improved():
-        S1.get_pivot_position()
-        S1.pivot_step()
-        print(S1.Y)
-    S1.show_optimal_solution()
+   #while S1.can_be_improved():
+   #    S1.get_pivot_position()
+   #    S1.pivot_step()
+   #    print(S1.Y)
+   #S1.show_optimal_solution()
 
