@@ -116,21 +116,26 @@ class Simplex:
                     index_of_neg_number = i
                     for j in range(len(self.Y)):
                         if j != 0:
-                            if self.Y[j][index_of_neg_number] <= 0:
+                            if self.Y[j][index_of_neg_number] < 0:
                                 status = 2
                             else:
                                 status = 1
                     if status == 2:
                         return 4
             return 2
+
         ##    Krok - 2d) 2e)    ##
         elif any(x == 0 for x in self.Y[0]):
+            status = 0
             index_of_zero = self.Y[0].index(0)
             for i in range(len(self.Y)):
-                if self.Y[i][index_of_zero] > 0:
-                    return 5
-                else:
-                    return 6
+                if i != 0:
+                    if self.Y[i][index_of_zero] > 0:
+                        return 5
+                    else:
+                        status = 1
+            if status == 1:
+                return 6
         else:
             return 3
 
@@ -193,7 +198,7 @@ if __name__ == '__main__':
     #  - najlepiej z wykladem
     #  - dopuszczanie do rozwiazania, jak i potem szukanie rozwiazan
     #  - sprawdzic dla wiekszych instancji jak sie zachowuje algorytm
-    # obsluzyc sytuacje wyjatkowe: te wszystkie zbiory puste i inne ( opisane na wykladzie)
+    #  - obsluzyc sytuacje wyjatkowe: te wszystkie zbiory puste i inne ( opisane na wykladzie)
     # stworzyc wizu
     # parsing danych z wizu
     # - obslugiwanie minimum/maximum, ograniczenia wiekszosciowe, mniejszosciowe
@@ -214,7 +219,9 @@ if __name__ == '__main__':
 
     # Z pliku
     E1 = [[0,-1,1],[3,-2,1],[6,1,1],[20,5,2]]
+    E2 = [[0,-1,-1],[3,-2,1],[6,1,1],[20,5,2]]
     E3 = [[0,-1,-2],[3,-2,1],[6,1,1],[20,5,2]]
+    E5 = [[0,-1,-2],[-2,2,-1],[-2,-1,2]]
     E9 = [[0,-1,-2],[100,1,1],[720,6,9],[60,0,1]]
     E8 = [[0,-2100,-1200],[-2,2,-1],[-2,-1,2]] #nie ma maximum, wedlug wolfram
     E10 = [[0,-1,-1],[1,-1,1],[-5,-1,-2],[3,1,0]]
@@ -238,13 +245,14 @@ if __name__ == '__main__':
     W7 = [[0,-1/2,1,1],[2,-1/2,2,1],[-3,1/2,-2,1],[2,0,1,-1]]
 
 
-    S1 = Simplex(E9)
+    S1 = Simplex(C1)
 
     while S1.check_the_case() == 1:
         S1.do_admissibility()
     while S1.check_the_case() == 2:
         S1.get_pivot_position()
         S1.pivot_step()
+        print(S1.Y)
     var_status = S1.check_the_case()
 
     if var_status == 3:
@@ -253,6 +261,10 @@ if __name__ == '__main__':
         print("Rozwiazanie nieograniczone bez rozwiazania")
     elif var_status == 5:
         print("Nieskonczona ilosc rozwiazan na ograniczonym obszarze")
+        S1.show_optimal_solution()
+        S1.get_pivot_position()
+        S1.pivot_step()
+        S1.show_optimal_solution()
     elif var_status == 6:
         print("Nieskonczona ilosc rozwiazan na nieograniczonym obszarze")
     elif var_status == 7:
