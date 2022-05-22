@@ -45,7 +45,7 @@ class Simplex:
         previous_value = 9999
         index_min_value_in_0th_column = 0
         for i in range(len(self.Y)):
-            if self.Y[i][0] < 0:
+            if self.Y[i][0] < 0 and i !=0:
                 current_value = self.Y[i][0]
                 if current_value < previous_value:
                     index_min_value_in_0th_column = i
@@ -62,7 +62,7 @@ class Simplex:
         ##    Krok - 3c)    ##
         list_of_out_criteria = []
         for i in range(len(self.Y)):
-            if self.Y[i][self.pivot_index_column] > 0 and self.Y[i][0] != 0 and i != 0:
+            if self.Y[i][self.pivot_index_column] > 0 and self.Y[i][0] != 0 and i != 0 and i != index_min_value_in_0th_column:
                 list_of_out_criteria.append(self.Y[i][0] / self.Y[i][self.pivot_index_column])
             else:
                 list_of_out_criteria.append(99999)  # gdyby chcial dzielic przez 0 to wstaw tam duza liczbe zamiast dzielenia
@@ -138,9 +138,9 @@ if __name__ == '__main__':
     #  - dodac nazwy zmiennych w bazie i sledzenie ich
     #  x obsluzyc minimalizacje funkcji celu
     #  - przetestowac z odpowiedziami poszczegolne przejscia i kolejne tablice simplexowe
-    # najlepiej z wykladem
-    # dopuszczanie do rozwiazania, jak i potem szukanie rozwiazan
-    # sprawdzic dla wiekszych instancji jak sie zachowuje algorytm
+    #  - najlepiej z wykladem
+    #  - dopuszczanie do rozwiazania, jak i potem szukanie rozwiazan
+    #  - sprawdzic dla wiekszych instancji jak sie zachowuje algorytm
     # obsluzyc sytuacje wyjatkowe: te wszystkie zbiory puste i inne ( opisane na wykladzie)
     # stworzyc wizu
     # parsing danych z wizu
@@ -151,63 +151,36 @@ if __name__ == '__main__':
 
 
 
-    A1 = [[7,0.33,-0.33],[1.5,-0.16,0.66],[3.5,0.16,1.33],[3.5,0.16,0.33]]
-
-    A2 = [[0,-40,-30],[12,1,1],[16,2,1]]
-
-    A3 = [[0,-2,-5],[24,1,4],[21,3,1],[9,1,1]]
-    A4 = [[0,-2,-5],[6,1,1],[3,0,1],[9,1,2]]
-
-    #dla B dziala robienie dopuszczalnego rozwiazania
-    B = [[0,-1,-6],[-2,-2,-1],[3,-1,1],[6,1,1]]
-
-    #dla C nie dziala, ale to jest min, plus same wiekszosciowe ograniczenia
-    C = [[0,1,1],[-8,-1,-2],[-6,-2,-1],[-5,-1,-1]]
-
-
     #Testy
     #Ograniczenia mniejszosciowe, max funckji celu
     A = [[0, -2, -1], [5, 1, 1], [0, -1, 1], [21, 6, 2]]  # dziala
     A1 = [[0,-16,-12],[720,8,6],[1280,8,16],[960,12,8],[900,4,8]] #dziala ok
     A2 = [[0,-1,-3,-2],[5,1,2,1],[4,1,1,1],[1,0,1,2]] #dziala ok
     A3 = [[0,-1,-4],[4,-1,2],[1,-1,1],[36,4,5]] # dziala
+    W = [[0, -1, -6], [-2, -2, -1], [3, -1, 1], [6, 1, 1]]  # ok
 
 
     # Z pliku
     E1 = [[0,-1,1],[3,-2,1],[6,1,1],[20,5,2]]
     E3 = [[0,-1,-2],[3,-2,1],[6,1,1],[20,5,2]]
     E9 = [[0,-1,-2],[100,1,1],[720,6,9],[60,0,1]]
-    E8 = [[0,-2100,-1200],[-2,2,-1],[-2,-1,2]]
-    #Ograniczenia mniejszosciowe, min funkcji celu
-    #test oblany, bo tego nie trzeba
-    B = [[0,1,1],[4,1,1],[2,-1,1]]
+    E8 = [[0,-2100,-1200],[-2,2,-1],[-2,-1,2]] #nie ma maximum, wedlug wolfram
+    E10 = [[0,-1,-1],[1,-1,1],[-5,-1,-2],[3,1,0]]
+    E16 = [[0,-1,-1],[-5,-1,-2],[1,-1,1],[3,1,0]]
+
+    #z neta
+    C1 = [[0,-1,-1.5],[1200,12,12],[1500,8,10],[500,3,2],[600,2,3],[200,1,1]] #ok
 
 
-    S1 = Simplex(E8)
-
+    S1 = Simplex(C1)
     print(S1.check_admissibility())
-    S1.do_admissibility()
-    print(S1.pivot_index_row,S1.pivot_index_column,S1.pivot_element)
-    print(S1.Y)
-
-
-    #S1.get_pivot_position()
-    #print(S1.pivot_index_row,S1.pivot_index_column,S1.pivot_element)
-    #S1.pivot_step()
-    #print(S1.Y)
-    #S1.show_optimal_solution()
-    #print("########################")
-    #S1.get_pivot_position()
-    #print(S1.pivot_index_row, S1.pivot_index_column, S1.pivot_element)
-    #S1.pivot_index_row = 1
-    #S1.pivot_element = 1
-    #S1.pivot_step()
-    #print(S1.Y)
-    #S1.show_optimal_solution()
-
-   #while S1.can_be_improved():
-   #    S1.get_pivot_position()
-   #    S1.pivot_step()
-   #    print(S1.Y)
-   #S1.show_optimal_solution()
+    while not S1.check_admissibility():
+        S1.do_admissibility()
+        print(S1.Y)
+    print(S1.check_admissibility())
+    while S1.can_be_improved():
+        S1.get_pivot_position()
+        S1.pivot_step()
+        print(S1.Y)
+    S1.show_optimal_solution()
 

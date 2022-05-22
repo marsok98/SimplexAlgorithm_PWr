@@ -53,6 +53,7 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
 
 3. Zrobienie dopuszczalnosci
     a) Znajdz minimum w 0th kolumnie i zapisz indeks tego wiersza
+        - <NEW> nie moze wziac jako minimum elementu o indeksie (0,0)
     b) Znajdz minimum w wierszu o indeksie wyliczonym w 3a)
         - zapewnij zeby nie wzial czegos z 0th kolumny (tam sa ograniczenia i bralismy juz stamtad minimum 3a))
         - weź indeks tej kolumny
@@ -62,6 +63,7 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
             - wyrazy z kolumny z indeksem nie moga byc mniejsze od 0 ani 0
             - wyrazy z kolumny 0th nie moga byc 0
             - nie mozemy operowac na wierszu gdzie jest funkcja celu
+            - <NEW?> nie mozemy operowac na wierszu z ktorego bralismy minimum
         - weź z tego minimum
             - wez indeks  z wiersza gdzie bylo minimum
             - Zmienna stojaca przy tym wierszu wychodzi z bazy
