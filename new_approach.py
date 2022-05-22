@@ -77,10 +77,39 @@ class Simplex:
         ##    Krok - 3e)    ##
         self.pivot_step()
 
+    def check_if_set_of_solution_is_empty(self):
+        previous_value = 9999
+        index_min_value_in_0th_column = 0
+        for i in range(len(self.Y)):
+            if self.Y[i][0] < 0 and i != 0:
+                current_value = self.Y[i][0]
+                if current_value < previous_value:
+                    index_min_value_in_0th_column = i
+                    previous_value = current_value
+        is_greater_than_zero = 0
+        for i in range(len(self.Y[index_min_value_in_0th_column])):
+            if i != 0:
+                if self.Y[index_min_value_in_0th_column][i] >= 0:
+                    is_greater_than_zero = 1
+                else:
+                    is_greater_than_zero = 0
+                    return 0 #zbior nie jest pusty
+        if is_greater_than_zero == 1:
+            return 1 #zbior jest pusty
 
-    ####    Krok - 4    ####
-    def can_be_improved(self):
+
+    ####    Krok - 2    ####
+    def check_the_case(self):
+
+        ##    Krok - 2a)    ##
+        if not self.check_admissibility():
+            if self.check_if_set_of_solution_is_empty() == 1:
+                return 7
+            else:
+                return 1
+
         status = 0
+        ##    Krok - 2b) 2c)    ##
         if any(x < 0 for x in self.Y[0]):
             for i in range(len(self.Y[0])):
                 if self.Y[0][i] < 0:
@@ -88,22 +117,22 @@ class Simplex:
                     for j in range(len(self.Y)):
                         if j != 0:
                             if self.Y[j][index_of_neg_number] <= 0:
-                                pass #spelnia nasz warunek
                                 status = 2
                             else:
                                 status = 1
                     if status == 2:
                         return 4
-            return 1
+            return 2
+        ##    Krok - 2d) 2e)    ##
         elif any(x == 0 for x in self.Y[0]):
             index_of_zero = self.Y[0].index(0)
             for i in range(len(self.Y)):
                 if self.Y[i][index_of_zero] > 0:
-                    return 2
+                    return 5
                 else:
-                    return 3
+                    return 6
         else:
-            return 0
+            return 3
 
     ####    Krok - 5    ####
     def get_pivot_position(self):
@@ -206,29 +235,35 @@ if __name__ == '__main__':
 
     W6 = [[0,-1,-6],[-2,-2,-1],[3,-1,1],[6,1,1]]
 
+    W7 = [[0,-1/2,1,1],[2,-1/2,2,1],[-3,1/2,-2,1],[2,0,1,-1]]
 
-    S1 = Simplex(W6)
-    while not S1.check_admissibility():
+
+    S1 = Simplex(E9)
+
+    while S1.check_the_case() == 1:
         S1.do_admissibility()
-    while S1.can_be_improved() == 1:
+    while S1.check_the_case() == 2:
         S1.get_pivot_position()
         S1.pivot_step()
-    S1.show_optimal_solution()
-    #print(S1.check_admissibility())
-    #
-    #S1.get_pivot_position()
-    #S1.pivot_step()
-    #if S1.can_be_improved() == 3:
-    #    print("Rozwiazanie nieskonczona ilosc na zbiorze nieograniczonym")
-    #    print(S1.Y)
-    #    S1.show_optimal_solution()
+    var_status = S1.check_the_case()
+
+    if var_status == 3:
+        S1.show_optimal_solution()
+    elif var_status == 4:
+        print("Rozwiazanie nieograniczone bez rozwiazania")
+    elif var_status == 5:
+        print("Nieskonczona ilosc rozwiazan na ograniczonym obszarze")
+    elif var_status == 6:
+        print("Nieskonczona ilosc rozwiazan na nieograniczonym obszarze")
+    elif var_status == 7:
+        print("Zbior jest pusty")
+    else:
+        pass
 
 
-    #print(S1.can_be_improved())
-    #if S1.can_be_improved() == 4:
-    #    print("Zbior nieograniczony")
-    #    S1.get_pivot_position()
-    #    S1.pivot_step()
-    #    print(S1.Y)
-    #S1.show_optimal_solution()
+
+
+
+
+
 

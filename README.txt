@@ -45,11 +45,57 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
 -------------------------------------------
 1. Zapis danych do tablicy simplexowej.
 
-2. Sprawdzenie dopuszczalnosci rozwiązania początkowego ustawienia tablicy Simplex (czy jesteśmy w jednym z wierzchołkow)
-    a) Jeśli w 0th kolumnie pojawi sie jakas wartosc ujemna, znaczy ze rozwiazanie jest niedopuszczalne - GO TO KROK 3
-    b) Jeśli w 0th kolumnie wszystkie wyrazy będą nieujemne ( 0 lub wiecej) znaczy ze rozwiazanie jest dopuszczalne
-        - nasza tablica reprezentuje wierzcholek simplexa
-        - GO TO KROK 4
+2. Sprawdzenie przypadku z ktorym mamy doczynienia (metoda: check_the_case)
+    a) Sprawdzenie dopuszczalnosci rozwiazania początkowego ustawienia tablicy Simplex (czy jesteśmy w jednym z wierzchołkow)
+
+        aa) Jeśli w 0th kolumnie pojawi sie jakas wartosc ujemna, znaczy ze rozwiazanie jest niedopuszczalne
+            - Jesli biorac wiersz, gdzie znajduje sie ta wartosc ujemna:
+                - wszystkie wspolczynniki w wierszu są dodatnie lub 0, znaczy ze zbior rozwiazan jest pusty
+                - <STATUS 7>
+            - Jesli biorac wiersz, gdzie znajduje sie ta wartosc ujemna:
+                - jakikolwiek wspolczynnik w tym wierszu jest ujemny, znaczy ze tablica wymaga zrobienia dopuszczalnosci
+                - <STATUS 1>
+                - GOTO <KROK 3>
+
+        ab) Jeśli w 0th kolumnie wszystkie wyrazy będą nieujemne ( 0 lub wiecej) znaczy ze rozwiazanie jest dopuszczalne
+            - Nasza tablica reprezentuje wierzcholek simplexa
+            - GO TO KROK xx
+
+     b)  Sprawdzenie czy obecne rozwiazanie jest optymalne
+
+        ba) Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
+            - cokolwiek pod znalezionym elementem jest wieksze od 0
+            - to zadanie ma jedno rozwiazanie oraz mozna ulepszyc obecne rozwiazanie
+            - <STATUS 2>
+            - GO TO <KROK 5>
+        bb) Jeśli w 0th wierszu (funkcja celu) jest wszystko dodatnie
+            - koniec zadania
+            - rozwiazanie optymalne zostalo osiagniete
+            - <STATUS 3>
+
+     c) Sprawdzenie: Zadanie nieograniczone z brakiem rozwiazania:
+
+        ca) Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
+            - oraz wszystkie elementy ponizej tego znalezionego ujemnego wspolczynnika
+            - sa mniejsze równe 0 (y<=0)
+            - zadanie jest nieograniczone i nie ma rozwiazania
+            - <STATUS 4>
+
+     d) Sprawdzenie: Zadanie nieskonczenie wiele rozwiazan na zbiorze ograniczonym:
+
+        da) Jesli w 0th wierszu (funkcja celu) jest cokolwiek rowne 0
+            - oraz w kolumnie ponizej tego 0 jest cokolwiek dodatniego
+            - znaczy jest wiele rozwiazan na zbiorze ograniczonym
+            - nalezy wyznaczyc drugi koniec odcinka
+            - <STATUS 5>
+
+     e)  Sprawdzenie: Zadanie nieskonczenie wiele rozwiazan na zbiorze nieograniczonym:
+
+        ea) Jesli w 0th wierszu (funkcja celu) jest cokolwiek rowne 0
+            - oraz w kolumnie ponizej tego 0 jest wszystko ujemne bądź rowne 0 (y <= 0)
+            - znaczy ze jest nieskonczona ilosc rozwiazan optymalnych na zbiorze nieograniczonym
+            - <STATUS 6>
+
 
 3. Zrobienie dopuszczalnosci
     a) Znajdz minimum w 0th kolumnie i zapisz indeks tego wiersza
@@ -72,29 +118,6 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
         - indeks z 3c) to indeks wiersza
      e) Wylicz nową tablice Simplex - Skorzystaj z funkcji z KROKU 6
      f) GO TO Krok 2 - Ponowne sprawdzenie dopuszczalnosci
-
-4. Sprawdzenie optymalnosci
-    a) Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
-        - cokolwiek pod znalezionym elementem jest wieksze od 0
-        - zadanie ma jedno rozwiazanie oraz mozna ulepszyc obecne rozwiazanie
-        - <STATUS 1>
-
-    b) <NEW> Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
-        - oraz wszystkie elementy ponizej tego znalezionego ujemnego wspolczynnika
-        - sa mniejsze równe 0 (y<=0)
-        - zadanie jest nieograniczone i nie ma rozwiazania
-        - <STATUS 4>
-    b) Jesli w 0th wierszu (funkcja celu) są wszystkie wyrazy są dodatnie - nie mozna ulepszyc - GO TO KROK 8
-        - <STATUS 0>
-    c) <NEW> Jesli w 0th wierszu (funkcja celu) jest cokolwiek rowne 0
-        - oraz w kolumnie ponizej tego 0 jest cokolwiek dodatniego
-        - znaczy jest wiele rozwiazan na zbiorze ograniczonym
-        - nalezy wyznaczyc drugi koniec odcinka
-        - <STATUS 2>
-    d) <NEW> Jesli w 0th wierszu (funkcja celu) jest cokolwiek rowne 0
-        - oraz w kolumnie ponizej tego 0 jest wszystko ujemne bądź rowne 0 (y <=0)
-        - znaczy ze jest nieskonczona ilosc rozwiazan optymalnych na zbiorze nieograniczonym
-        - <STATUS 3>
 
 
 5. Pobranie pozycji pivota
@@ -140,3 +163,12 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
 
 8. Pokazanie rozwiazania
 
+Statusy z metody check_the_case
+ 0 - default
+ 1 - require adminisibility
+ 2 - can be improved
+ 3 - is optimal
+ 4 - unlimited task no solution
+ 5 - infinite number of solution on limited area
+ 6 - infinite number of solution on unlimited area
+ 7 - empty set
