@@ -74,8 +74,28 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
      f) GO TO Krok 2 - Ponowne sprawdzenie dopuszczalnosci
 
 4. Sprawdzenie optymalnosci
-    a) Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0 - mozna ulepszyc
+    a) Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
+        - cokolwiek pod znalezionym elementem jest wieksze od 0
+        - zadanie ma jedno rozwiazanie oraz mozna ulepszyc obecne rozwiazanie
+        - <STATUS 1>
+
+    b) <NEW> Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
+        - oraz wszystkie elementy ponizej tego znalezionego ujemnego wspolczynnika
+        - sa mniejsze równe 0 (y<=0)
+        - zadanie jest nieograniczone i nie ma rozwiazania
+        - <STATUS 4>
     b) Jesli w 0th wierszu (funkcja celu) są wszystkie wyrazy są dodatnie - nie mozna ulepszyc - GO TO KROK 8
+        - <STATUS 0>
+    c) <NEW> Jesli w 0th wierszu (funkcja celu) jest cokolwiek rowne 0
+        - oraz w kolumnie ponizej tego 0 jest cokolwiek dodatniego
+        - znaczy jest wiele rozwiazan na zbiorze ograniczonym
+        - nalezy wyznaczyc drugi koniec odcinka
+        - <STATUS 2>
+    d) <NEW> Jesli w 0th wierszu (funkcja celu) jest cokolwiek rowne 0
+        - oraz w kolumnie ponizej tego 0 jest wszystko ujemne bądź rowne 0 (y <=0)
+        - znaczy ze jest nieskonczona ilosc rozwiazan optymalnych na zbiorze nieograniczonym
+        - <STATUS 3>
+
 
 5. Pobranie pozycji pivota
     a) Weź indeks wyrazu minimum z 0th wiersza (funkcja celu) - to jest indeks kolumny pivota

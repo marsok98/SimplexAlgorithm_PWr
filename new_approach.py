@@ -80,7 +80,30 @@ class Simplex:
 
     ####    Krok - 4    ####
     def can_be_improved(self):
-        return any(x < 0 for x in self.Y[0])
+        status = 0
+        if any(x < 0 for x in self.Y[0]):
+            for i in range(len(self.Y[0])):
+                if self.Y[0][i] < 0:
+                    index_of_neg_number = i
+                    for j in range(len(self.Y)):
+                        if j != 0:
+                            if self.Y[j][index_of_neg_number] <= 0:
+                                pass #spelnia nasz warunek
+                                status = 2
+                            else:
+                                status = 1
+                    if status == 2:
+                        return 4
+            return 1
+        elif any(x == 0 for x in self.Y[0]):
+            index_of_zero = self.Y[0].index(0)
+            for i in range(len(self.Y)):
+                if self.Y[i][index_of_zero] > 0:
+                    return 2
+                else:
+                    return 3
+        else:
+            return 0
 
     ####    Krok - 5    ####
     def get_pivot_position(self):
@@ -172,15 +195,40 @@ if __name__ == '__main__':
     C1 = [[0,-1,-1.5],[1200,12,12],[1500,8,10],[500,3,2],[600,2,3],[200,1,1]] #ok
 
 
-    S1 = Simplex(C1)
-    print(S1.check_admissibility())
+    #przypadki szczegolne
+    #wiele rozwiazan optymalnych na zbiorze ograniczonym
+    W2 = [[0,-4,-2],[4,-1,1],[6,2,1]]
+    #wiele rozwiazan optymalnych na zbiorze nieograniczonym
+    W3 = [[0,2,-4],[1,-2,1],[4,-1,2]]
+
+    W4 = [[0,-1,-1],[2,-1,-1],[1,-1,1]] #zadanie nieograniczone
+    W5 = [[0,-1,-1],[2,-1,-1],[1,1,-1]]
+
+    W6 = [[0,-1,-6],[-2,-2,-1],[3,-1,1],[6,1,1]]
+
+
+    S1 = Simplex(W6)
     while not S1.check_admissibility():
         S1.do_admissibility()
-        print(S1.Y)
-    print(S1.check_admissibility())
-    while S1.can_be_improved():
+    while S1.can_be_improved() == 1:
         S1.get_pivot_position()
         S1.pivot_step()
-        print(S1.Y)
     S1.show_optimal_solution()
+    #print(S1.check_admissibility())
+    #
+    #S1.get_pivot_position()
+    #S1.pivot_step()
+    #if S1.can_be_improved() == 3:
+    #    print("Rozwiazanie nieskonczona ilosc na zbiorze nieograniczonym")
+    #    print(S1.Y)
+    #    S1.show_optimal_solution()
+
+
+    #print(S1.can_be_improved())
+    #if S1.can_be_improved() == 4:
+    #    print("Zbior nieograniczony")
+    #    S1.get_pivot_position()
+    #    S1.pivot_step()
+    #    print(S1.Y)
+    #S1.show_optimal_solution()
 
