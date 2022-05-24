@@ -249,9 +249,12 @@ if __name__ == '__main__':
 
     while S1.check_the_case() == 1:
         S1.do_admissibility()
+        print("Po zrealizowaniu dopuszczalnosci")
+        print(S1.Y)
     while S1.check_the_case() == 2:
         S1.get_pivot_position()
         S1.pivot_step()
+        print("Po przeliczeniu tablicy Simplex")
         print(S1.Y)
     var_status = S1.check_the_case()
 
