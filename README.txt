@@ -77,7 +77,7 @@ Kroki rozwiazan simplexa (dwufazowa metoda)
 
         ca) Jeśli w 0th wierszu (funkcja celu) jest cokolwiek mniejsze od 0
             - oraz wszystkie elementy ponizej tego znalezionego ujemnego wspolczynnika
-            - sa mniejsze równe 0 (y<=0)  <NEW> zeby dobrze liczylo zmienilem na y<0
+            - sa mniejsze równe 0 (y<=0)  <NEW> zeby dobrze liczylo zmienilem na y<0 #jednak dalem spowrotem <=
             - zadanie jest nieograniczone i nie ma rozwiazania
             - <STATUS 4>
 

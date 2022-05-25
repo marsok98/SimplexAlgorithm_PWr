@@ -114,14 +114,16 @@ class Simplex:
             for i in range(len(self.Y[0])):
                 if self.Y[0][i] < 0:
                     index_of_neg_number = i
+                    status = 0
                     for j in range(len(self.Y)):
-                        if j != 0:
-                            if self.Y[j][index_of_neg_number] < 0:
+                        if j != 0 and status != 1:
+                            if self.Y[j][index_of_neg_number] <= 0:
                                 status = 2
                             else:
                                 status = 1
                     if status == 2:
                         return 4
+
             return 2
 
         ##    Krok - 2d) 2e)    ##
@@ -244,9 +246,18 @@ if __name__ == '__main__':
 
     W7 = [[0,-1/2,1,1],[2,-1/2,2,1],[-3,1/2,-2,1],[2,0,1,-1]]
 
+#Testy od dr Szlachcic
+    Test1 = [[0,-2,-5],[6,1,1],[3,0,1],[9,1,2]]
 
-    S1 = Simplex(C1)
+    Test2 = [[0,-1,-1],[4,0,1]] # na tym sie wywalilo
 
+    Test3 = [[0,-1,-1],[4,1,0]]
+
+    Test4 = [[0,-1,-1],[10,-1,-1],[3,-1,1]]
+
+
+    S1 = Simplex(Test4)
+    print(S1.Y)
     while S1.check_the_case() == 1:
         S1.do_admissibility()
         print("Po zrealizowaniu dopuszczalnosci")
