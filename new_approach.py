@@ -209,7 +209,7 @@ class Simplex:
         if var_status == 3:
             self.show_optimal_solution()
         elif var_status == 4:
-            print("Rozwiazanie nieograniczone bez rozwiazania")
+            print("Zadanie nieograniczone bez rozwiazania")
         elif var_status == 5:
             print("Nieskonczona ilosc rozwiazan na ograniczonym obszarze")
             self.show_optimal_solution()

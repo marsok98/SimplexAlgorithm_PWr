@@ -71,7 +71,7 @@ class Visu:
 
         self.button_calculate.grid(row= 9 + self.rows_number, column=0, columnspan=5, pady=10)
 
-        self.log_widget = ScrolledText(self.window, height=10, width=75, font=("consolas", "8", "normal"))
+        self.log_widget = ScrolledText(self.window, height=11, width=75, font=("consolas", "8", "normal"))
         self.log_widget.grid(row=1, column=10,rowspan = 4)
         label_log_widget = Label(self.window, text="Prezentacja wynikow")
         label_log_widget.grid(row=0, column=10)
