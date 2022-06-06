@@ -191,6 +191,37 @@ class Simplex:
         print("-----Rozwiazanie optymalne-----")
         for i in range(len(self.basic_variables)):
             print(str(self.basic_variables[i]) + ":" + str(round(self.Y[i][0],2)))
+            
+    
+    def calculate_simplex(self):
+        print(self.Y)
+        while self.check_the_case() == 1:
+            self.do_admissibility()
+            print("Po zrealizowaniu dopuszczalnosci")
+            print(self.Y)
+        while self.check_the_case() == 2:
+            self.get_pivot_position()
+            self.pivot_step()
+            print("Po przeliczeniu tablicy Simplex")
+            print(self.Y)
+        var_status = self.check_the_case()
+
+        if var_status == 3:
+            self.show_optimal_solution()
+        elif var_status == 4:
+            print("Rozwiazanie nieograniczone bez rozwiazania")
+        elif var_status == 5:
+            print("Nieskonczona ilosc rozwiazan na ograniczonym obszarze")
+            self.show_optimal_solution()
+            self.get_pivot_position()
+            self.pivot_step()
+            self.show_optimal_solution()
+        elif var_status == 6:
+            print("Nieskonczona ilosc rozwiazan na nieograniczonym obszarze")
+        elif var_status == 7:
+            print("Zbior jest pusty")
+        else:
+            pass
 
 if __name__ == '__main__':
     #TODO
@@ -256,35 +287,7 @@ if __name__ == '__main__':
     Test4 = [[0,-1,-1],[10,-1,-1],[3,-1,1]]
 
 
-    S1 = Simplex(Test4)
-    print(S1.Y)
-    while S1.check_the_case() == 1:
-        S1.do_admissibility()
-        print("Po zrealizowaniu dopuszczalnosci")
-        print(S1.Y)
-    while S1.check_the_case() == 2:
-        S1.get_pivot_position()
-        S1.pivot_step()
-        print("Po przeliczeniu tablicy Simplex")
-        print(S1.Y)
-    var_status = S1.check_the_case()
-
-    if var_status == 3:
-        S1.show_optimal_solution()
-    elif var_status == 4:
-        print("Rozwiazanie nieograniczone bez rozwiazania")
-    elif var_status == 5:
-        print("Nieskonczona ilosc rozwiazan na ograniczonym obszarze")
-        S1.show_optimal_solution()
-        S1.get_pivot_position()
-        S1.pivot_step()
-        S1.show_optimal_solution()
-    elif var_status == 6:
-        print("Nieskonczona ilosc rozwiazan na nieograniczonym obszarze")
-    elif var_status == 7:
-        print("Zbior jest pusty")
-    else:
-        pass
+    
 
 
 
