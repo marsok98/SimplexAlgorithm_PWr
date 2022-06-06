@@ -1,14 +1,18 @@
 from tkinter import *
+
+
+
 def GetData():
     #trzeba rozwiazac ten problem
-    print(table[0][0].get())
-    #table_with_value = []
-    #single_row_value = [0] * (total_columns + 1)
-    #for i in range(total_rows + 1):
-    #    for j in range(total_columns + 1):
-    #       single_row_value[j] = table1[i][j].get()
-    #    table_with_value.append(single_row_value)
-    #print(table_with_value)
+
+    table_with_value = []
+    single_row_value = [0] * (total_columns + 1)
+    for i in range(total_rows + 1):
+        for j in range(total_columns + 1):
+            single_row_value[j] = table[i][j].get()
+        table_with_value.append(single_row_value)
+        single_row_value = [0] * (total_columns + 1)
+    print(table_with_value)
 
 top = Tk()
 top.geometry("1000x500")
@@ -23,12 +27,12 @@ top.geometry("1000x500")
 #                      text="Password").place(x=40,
 #                                             y=100)
 
-Input_frame = Frame(top)
-Input_frame.grid(row =4,column= 4)
+#Input_frame = Frame(top)
+#Input_frame.grid(row =4,column= 4)
 
 
-total_rows = 4
-total_columns = 2
+total_rows = 3
+total_columns = 3
 
 single_row = [0] * (total_columns+1)
 label_row = [0] * (total_columns+1)
@@ -37,19 +41,20 @@ table = []
 for i in range(total_rows+2):
     for j in range(total_columns+1):
         if i == 0:
-            label_row[j] = Label(Input_frame,width = 5,text = "x"+str(j))
+            label_row[j] = Label(top,width = 5,text = "x"+str(j))
             label_row[j].grid(row = i, column = j)
         if i == 1:
-            single_row[j] = Entry(Input_frame, width=5,bg = 'yellow')
+            single_row[j] = Entry(top, width=5,bg = 'yellow')
             single_row[j].grid(row=i, column=j)
         else:
-            single_row[j] = Entry(Input_frame, width=5)
+            single_row[j] = Entry(top, width=5)
             single_row[j].grid(row=i+1, column=j)
 
     if i==0:
         table.clear()
     else:
         table.append(single_row)
+        single_row = [0] * (total_columns+1)
 
 print(table)
 
@@ -62,4 +67,4 @@ Button_Confirm.grid(row =0,column= 0)
 
 
 
-top.mainloop() 
+top.mainloop()
