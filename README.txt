@@ -1,3 +1,7 @@
+Projekt na zaliczenie Teoria i Metody Optymalizacji - Studia Magisterskie - Automatyka i Robotyka
+
+
+
 
 Postać gdy ograniczenia są mniejszościowe:
 -------------------------------------------
